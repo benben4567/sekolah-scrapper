@@ -43,7 +43,7 @@ Catatan: Selenium 4.39+ otomatis mengelola driver Chrome selama browser yang ter
 
 | Argumen | Deskripsi |
 | --- | --- |
-| `--mode {full,resume,province}` | `full`: semua provinsi; `resume`: ulangi tapi skip NPSN yang sudah lengkap; `province`: hanya satu provinsi (butuh `--province-id`). |
+| `--mode {full,resume,province,provinces-only}` | `full`: semua provinsi; `resume`: ulangi tapi skip NPSN yang sudah lengkap; `province`: hanya satu provinsi (butuh `--province-id`); `provinces-only`: hanya memperbarui `provinces.csv` tanpa menyentuh sekolah. |
 | `--province-id <int>` | ID provinsi sesuai `provinces.csv` saat `--mode province`. |
 | `--start-province-id <int>` | Mulai scraping dari provinsi tertentu (berguna untuk melanjutkan manual). |
 | `--headless` | Menjalankan Chrome dalam mode headless. |
@@ -56,6 +56,7 @@ Contoh lain:
 python scraper.py --mode resume --headless
 python scraper.py --mode province --province-id 11 --headless
 python scraper.py --mode full --headless --recheck-incomplete
+python scraper.py --mode provinces-only --headless
 ```
 
 ## Struktur Folder

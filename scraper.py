@@ -31,11 +31,12 @@ def build_parser() -> ArgumentParser:
     )
     parser.add_argument(
         "--mode",
-        choices=["full", "resume", "province"],
+        choices=["full", "resume", "province", "provinces-only"],
         default="full",
         help=(
             "full: scrape seluruh provinsi; resume: ulangi tapi skip NPSN yang sudah lengkap;"
-            " province: fokus ke satu provinsi (butuh --province-id)."
+            " province: fokus ke satu provinsi (butuh --province-id);"
+            " provinces-only: hanya perbarui provinces.csv tanpa menyentuh sekolah."
         ),
     )
     parser.add_argument(
@@ -118,6 +119,13 @@ def main() -> None:
         schools_writer = SchoolsWriter(schools_csv, state)
         failed_writer = FailedWriter(failed_csv)
         scraper = DikmenScraper(driver, logger, state, schools_writer, failed_writer, args.delay)
+
+        if args.mode == "provinces-only":
+            provinces = scraper.scrape_provinces_if_needed(str(provinces_csv))
+            logger.start(
+                f"Berhasil memperbarui {len(provinces)} provinsi ke {provinces_csv.name}"
+            )
+            return
 
         state.ensure_provinces(scraper, provinces_csv)
         scraper.scrape_all_provinces(

@@ -91,21 +91,37 @@ class DikmenScraper:
 
         self.driver.get(BASE_URL)
         self.sleep_with_jitter()
-        rows = navigation.collect_table_rows(self.driver, navigation.PROVINCE_TABLE_SELECTOR)
         provinces: list[dict[str, str]] = []
-        for idx, row in enumerate(rows, start=1):
-            name, href = self._extract_link(row)
-            if not name:
-                continue
-            provinces.append({"id": str(idx), "nama": name, "url": href or BASE_URL})
+
+        while True:
+            rows = navigation.collect_table_rows(self.driver, navigation.PROVINCE_TABLE_SELECTOR)
+            for row in rows:
+                name, href = self._extract_link(row)
+                if not name:
+                    continue
+                provinces.append(
+                    {
+                        "id": str(len(provinces) + 1),
+                        "nama": name,
+                        "url": href or BASE_URL,
+                    }
+                )
+
+            next_button = navigation.find_next_page(self.driver)
+            if not next_button:
+                break
+            self.logger.wait("Pagination berikutnya untuk daftar provinsi")
+            next_button.click()
+            self.sleep_with_jitter()
 
         if not provinces:
             raise RuntimeError("Tidak menemukan tabel provinsi pada halaman utama.")
 
         csv_path = Path(provinces_csv_path)
-        if not csv_path.exists():
-            write_provinces(csv_path, provinces)
-            self.logger.save(f"Tulis {len(provinces)} provinsi ke {csv_path.name}")
+        write_provinces(csv_path, provinces)
+        self.logger.save(
+            f"Perbarui {len(provinces)} provinsi ke {csv_path.name}"
+        )
 
         self.state.provinces = provinces
         return provinces
