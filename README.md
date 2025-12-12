@@ -26,6 +26,19 @@ Pastikan sudah memasang Chrome/Chromium dan driver yang kompatibel.
 python scraper.py --mode full --headless
 ```
 
+## System Requirements
+
+| Komponen | Windows | macOS | Linux |
+| --- | --- | --- | --- |
+| OS | Windows 10/11 64-bit | macOS 12+ (Intel/Apple Silicon) | Distribusi modern (Ubuntu 20.04+, Debian 11+, Fedora 38+, dll.) |
+| Python | Python 3.9+ (disarankan 3.11) | Python 3.9+ (via Xcode CLT/Homebrew) | Python 3.9+ (paket distro/pyenv) |
+| Browser | Chrome/Chromium terbaru | Chrome/Chromium terbaru | Chrome/Chromium terbaru |
+| Driver | ChromeDriver kompatibel (biasanya otomatis dari selenium>=4) | ChromeDriver kompatibel | ChromeDriver kompatibel |
+| Dependensi | `pip install -r requirements.txt` | sama | sama |
+| Lainnya | PowerShell/CMD untuk CLI | Terminal (zsh/bash) | Terminal (bash/zsh) |
+
+Catatan: Selenium 4.39+ otomatis mengelola driver Chrome selama browser yang terpasang sesuai versi. Jika memakai driver manual, pastikan executable dapat diakses (misal `chromedriver.exe` di PATH Windows, atau `/usr/local/bin/chromedriver` di macOS/Linux).
+
 ### Opsi CLI
 
 | Argumen | Deskripsi |
